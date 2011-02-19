@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'redis'
+require 'uri'
 
 class Card
 
@@ -28,7 +29,8 @@ class Deck
   attr_accessor :cards
    
   def initialize(id)
-    @redis = Redis.new
+    uri = URI.parse(ENV["REDISTOGO_URL"])
+    @redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
     #id = @redis.incr "game"
     @id = id
   end
