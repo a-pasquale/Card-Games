@@ -1,9 +1,18 @@
+require 'rubygems'
+require 'redis'
+
 class Card
 
-  RANKS = %w(2 3 4 5 6 7 8 9 10 J Q K A)
-  SUITS = %w(Spade Heart Club Diamond)
+  RANKS = %w(2 3 4 5 6 7 8 9 10 j q k a)
+  SUITS = %w(spades hearts clubs diamonds)
 
-  attr_accessor :rank, :suit, :number 
+  attr_accessor :name, :rank, :suit, :number 
+
+  def name
+      # This is the format for the playing card images
+      # from http://www.eludication.org/playingcards.html
+      return "#{suit}-#{rank}-75.png"
+  end
 
   def initialize(id)
     @rank = RANKS[id % 13]
@@ -17,14 +26,29 @@ end
 class Deck
 
   attr_accessor :cards
-
-  def initialize(card_type)
-    # shuffle array and init each Card
-    @cards = (0..51).to_a.shuffle.collect { |id| card_type.new(id) }
+   
+  def initialize(id)
+    @redis = Redis.new
+    #id = @redis.incr "game"
+    @id = id
   end
- 
+
+  def shuffle!
+    # Make sure the deck is empty from any previous games.
+    keys = @redis.keys "game:#{@id}:*"
+    if keys.length > 0 then
+        @redis.del *keys
+    end
+    # shuffle array and init each Card
+    @cards = (0..51).to_a.shuffle.collect { |i| @redis.rpush "game:#{@id}:deck", i}
+  end
+
   def deal(n)
-    return @cards.pop(n)
+    cards = []
+    n.times do 
+      cards.push(@redis.lpop "game:#{@id}:deck")
+    end
+    return cards
   end
 
 end
@@ -34,22 +58,33 @@ class Hand
 
   attr_accessor :cards
 
-  def initialize(cards)
-    @cards = cards
+  def cards
+    cards = []
+    raw_cards = @redis.lrange @db, 0, -1 
+    raw_cards.each do |card|
+      cards.push(Card.new(card.to_i))
+    end
+    return cards
   end
 
-  def hit(num_cards)
-    @cards.push(num_cards)
-    @cards.flatten!
+  def initialize(id, player)
+    @redis = Redis.new
+    @db = "game:#{id}:player:#{player}:hand"
+  end
+
+  def hit(cards)
+    cards.each do |card|
+      @redis.rpush @db, card
+    end
   end
 
   def length
-    @cards.to_a.length
+    return @redis.llen @db
   end
 
-  def show(num=@cards.length)
+  def show(num=self.length)
     num.times do |i|
-        puts "#{@cards[i].rank} #{@cards[i].suit}"
+      puts cards[i].name 
     end
   end
 
