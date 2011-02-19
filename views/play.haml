@@ -1,0 +1,11 @@
+-if !@my_hand.bust?
+  %a{:title => 'Hit', :href => '/blackjack/hit'} Hit
+  %a{:title => 'Stay', :href => '/blackjack/stay'} Stay
+-else
+  %h2 Bust!
+  %a{:href => '/blackjack'} Play again?
+
+-# Dealer's hand.  Only show one card until the player stays.
+%h2 Dealer's hand:
+%img(src="/images/75/back-red-75-1.png")
+%img(src="/images/75/#{@dealer_hand.cards[1].name}")

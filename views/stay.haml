@@ -1,0 +1,17 @@
+-# Show all of dealer's hand
+%h2 Dealer's hand:
+-@dealer_hand.cards.each do |card|
+  %img(src="/images/75/#{card.name}")
+
+-if @dealer_hand.bust?
+  %h2 Dealer busts!
+-elsif @my_hand.count > @dealer_hand.count
+  %h2 You win!
+-else
+  %h2 Dealer wins.
+
+%a{:href => '/blackjack'} Play again?
+
+
+
+

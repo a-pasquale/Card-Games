@@ -1,0 +1,21 @@
+!!!
+%html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => "en", "xml:lang" => "en"}
+  %head
+    %title Blackjack
+    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
+    %link{"rel" => "stylesheet", "href" => "main.css", "type" => "text/css"}
+  %body
+    #header
+      %h1 Blackjack
+    #content
+      -# Player's hand
+      %h2 Your hand:
+      -@my_hand.cards.each do |card|
+        %img(src="/images/75/#{card.name}")
+      #actions
+        -if @blackjack
+          %h2 Blackjack!
+          %a{:href => '/blackjack'} Play again?
+        -else
+          = yield
+
