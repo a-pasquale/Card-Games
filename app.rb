@@ -40,3 +40,11 @@ get '/blackjack' do
   haml :play
 end
 
+get '/about' do
+    haml :about
+end
+
+get '/contact' do
+    haml :contact
+end
+

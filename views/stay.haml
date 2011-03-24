@@ -1,3 +1,9 @@
+-# Player's hand
+.hand
+  %h2 Your hand:
+  -@my_hand.cards.each do |card|
+    %img(src="/images/75/#{card.name}")
+
 -# Show all of dealer's hand
 %h2 Dealer's hand:
 -@dealer_hand.cards.each do |card|

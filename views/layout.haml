@@ -1,48 +1,42 @@
 !!!
 %html{ :xmlns => "http://www.w3.org/1999/xhtml"}
   %head
-    %title Double Down
+    %title Blackjack 
     %link{ :rel => "stylesheet", :href => "/styles.css", :type => "text/css"}
   %body
     #wrap
       #header
         #innerheader
           #title
-            %h1 Double Down          
-            %h2 A blackjack Game
+            %h1 
+              %a{ :href=>"/blackjack" } Blackjack
+            %h2 
+              %a{ :href=>"/blackjack" } Play The Game
+            %a{ :href=>'https://github.com/a-pasquale/Card-Games' }  
+              %img{ :alt=>"Fork me on GitHub",
+                    :src=>"http://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png",
+                    :style=>"position: absolute; top: 0; right: 0; border: 0;" }
       #content
         #page
           #innerpage    
-            .hand
-              -# Player's hand
-              %h2 Your hand:
-              -@my_hand.cards.each do |card|
-                %img(src="/images/75/#{card.name}")
-            #actions
-            -if @blackjack
-              %h2 Blackjack!
-              %a{:href => '/blackjack'} Play again?
-            -else
-              = yield
+            = yield
 
         #sidebar
           %ul
             %li 
-              %a{ :href => '/index.html' } INDEX
+              %a{ :href => '/about' } ABOUT
             %li
-              %a{ :href => '/examples.html' } EXAMPLES
+              %a{ :href => '/contact' } CONTACT
+            %li  
+              %a{ :href => '/blackjack' } PLAY
             %li
-              %a{ :href => '/http://www.spyka.net/web-templates' } Web Template
-            %li
-              %a{ :href => '/http://www.spyka.net/licesing' } Licence
-            %li
-              %a{ :href => '/http://www.spyka.net/contact' } Contact
+              %a{ :href => 'https://github.com/a-pasquale/Card-Games' } SOURCE CODE
         .clear
       #footer
         %p
-          &copy; 2009. MySite.com. Design: 
-          %a{ :href => "http://www.spyka.net" } spyka webmaster 
+          &copy; 2011 Andrew Pasquale 
           | 
-          %a{ :href => "http://www.justfreetemplates.com" } Free Web Templates
+          template design: 
+          %a{ :href=>"http://www.spyka.net" } spyka
 
 
