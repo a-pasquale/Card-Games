@@ -3,7 +3,7 @@ require 'redis'
 require './cards.rb'
 require './blackjack.rb'
 
-use Rack::Session::Cookie,
+use Rack::Session::Pool,
   :expire_after => 60*60*24*365 # In seconds
 
 configure do
@@ -12,7 +12,7 @@ end
 
 # Set up the game.
 before do
-  set :id, request.cookies["rack.session"]
+  set :id, request.cookies['rack.session']
   @dealer = 0
   @player = 1
   @deck = Deck.new
@@ -39,3 +39,4 @@ get '/blackjack' do
   @blackjack = @my_hand.blackjack?
   haml :play
 end
+
