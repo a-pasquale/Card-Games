@@ -7,7 +7,8 @@ use Rack::Session::Pool,
   :expire_after => 60*60*24*365 # In seconds
 
 configure do
-  set :redis, Redis.new
+  uri = URI.parse(ENV["REDISTOGO_URL"])
+  set :redis, Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
 end
 
 # Set up the game.
