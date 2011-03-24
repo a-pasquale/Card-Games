@@ -1,21 +1,48 @@
 !!!
-%html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => "en", "xml:lang" => "en"}
+%html{ :xmlns => "http://www.w3.org/1999/xhtml"}
   %head
-    %title Blackjack
-    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
-    %link{"rel" => "stylesheet", "href" => "main.css", "type" => "text/css"}
+    %title Double Down
+    %link{ :rel => "stylesheet", :href => "/styles.css", :type => "text/css"}
   %body
-    #header
-      %h1 Blackjack
-    #content
-      -# Player's hand
-      %h2 Your hand:
-      -@my_hand.cards.each do |card|
-        %img(src="/images/75/#{card.name}")
-      #actions
-        -if @blackjack
-          %h2 Blackjack!
-          %a{:href => '/blackjack'} Play again?
-        -else
-          = yield
+    #wrap
+      #header
+        #innerheader
+          #title
+            %h1 Double Down          
+            %h2 A blackjack Game
+      #content
+        #page
+          #innerpage    
+            .hand
+              -# Player's hand
+              %h2 Your hand:
+              -@my_hand.cards.each do |card|
+                %img(src="/images/75/#{card.name}")
+            #actions
+            -if @blackjack
+              %h2 Blackjack!
+              %a{:href => '/blackjack'} Play again?
+            -else
+              = yield
+
+        #sidebar
+          %ul
+            %li 
+              %a{ :href => '/index.html' } INDEX
+            %li
+              %a{ :href => '/examples.html' } EXAMPLES
+            %li
+              %a{ :href => '/http://www.spyka.net/web-templates' } Web Template
+            %li
+              %a{ :href => '/http://www.spyka.net/licesing' } Licence
+            %li
+              %a{ :href => '/http://www.spyka.net/contact' } Contact
+        .clear
+      #footer
+        %p
+          &copy; 2009. MySite.com. Design: 
+          %a{ :href => "http://www.spyka.net" } spyka webmaster 
+          | 
+          %a{ :href => "http://www.justfreetemplates.com" } Free Web Templates
+
 
