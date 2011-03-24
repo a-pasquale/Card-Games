@@ -1,15 +1,23 @@
 require 'sinatra'
+require 'redis'
 require './cards.rb'
 require './blackjack.rb'
 
+use Rack::Session::Cookie,
+  :expire_after => 60*60*24*365 # In seconds
+
+configure do
+  set :redis, Redis.new
+end
+
 # Set up the game.
 before do
-  @id = 1
+  set :id, request.cookies["rack.session"]
   @dealer = 0
   @player = 1
-  @deck = Deck.new(@id)
-  @my_hand = BlackjackHand.new(@id,@player)
-  @dealer_hand = BlackjackHand.new(@id,@dealer)
+  @deck = Deck.new
+  @my_hand = BlackjackHand.new(@player)
+  @dealer_hand = BlackjackHand.new(@dealer)
 end
 
 get '/blackjack/hit' do

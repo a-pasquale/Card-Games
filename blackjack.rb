@@ -15,7 +15,7 @@ class BlackjackHand < Hand
 
     def cards
       cards = []
-      raw_cards = @redis.lrange @db, 0, -1
+      raw_cards = settings.redis.lrange @hand, 0, -1
       raw_cards.each do |card|
         cards.push(BlackjackCard.new(card.to_i))
       end

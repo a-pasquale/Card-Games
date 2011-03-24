@@ -27,26 +27,25 @@ class Deck
 
   attr_accessor :cards
    
-  def initialize(id)
-    @redis = Redis.new
-    #id = @redis.incr "game"
-    @id = id
+  def initialize()
+    @id = settings.id
+    @deck = "game:#{@id}:deck"
   end
 
   def shuffle!
     # Make sure the deck is empty from any previous games.
-    keys = @redis.keys "game:#{@id}:*"
+    keys = settings.redis.keys "game:#{@id}:*"
     if keys.length > 0 then
-        @redis.del *keys
+        settings.redis.del *keys
     end
     # shuffle array and init each Card
-    @cards = (0..51).to_a.shuffle.collect { |i| @redis.rpush "game:#{@id}:deck", i}
+    @cards = (0..51).to_a.shuffle.collect { |i| settings.redis.rpush @deck, i}
   end
 
   def deal(n)
     cards = []
     n.times do 
-      cards.push(@redis.lpop "game:#{@id}:deck")
+      cards.push(settings.redis.lpop @deck)
     end
     return cards
   end
@@ -58,28 +57,27 @@ class Hand
 
   attr_accessor :cards
 
+  def initialize(player)
+    @hand = "game:#{settings.id}:player:#{player}:hand"
+  end
+
   def cards
     cards = []
-    raw_cards = @redis.lrange @db, 0, -1 
+    raw_cards = settings.redis.lrange @hand, 0, -1 
     raw_cards.each do |card|
       cards.push(Card.new(card.to_i))
     end
     return cards
   end
 
-  def initialize(id, player)
-    @redis = Redis.new
-    @db = "game:#{id}:player:#{player}:hand"
-  end
-
   def hit(cards)
     cards.each do |card|
-      @redis.rpush @db, card
+      settings.redis.rpush @hand, card
     end
   end
 
   def length
-    return @redis.llen @db
+    return settings.redis.llen @hand
   end
 
   def show(num=self.length)
