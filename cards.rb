@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'redis'
+require 'uri'
 
 class Card
 
